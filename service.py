@@ -4,13 +4,11 @@ def inserir_dados(dados, tabela, values):
     try:
         conn = conecta_segundo()
         cursor = conn.cursor()
-        quantidade_values = f"({', '.join(['%s'] * len(values))})"
-        print(quantidade_values)
+        quantidade_parametros = f"({', '.join(['%s'] * len(values))})"
         for i in range(len(values)):
             nomes_colunas = ", "
             nomes_colunas = f"({nomes_colunas.join([values[i]])})"
-        print(nomes_colunas)
-        comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_values};"
+        comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
         cursor.execute(comando, dados)
         conn.commit()
         print("Dados inseridos com sucesso!")
@@ -19,7 +17,7 @@ def inserir_dados(dados, tabela, values):
     finally:
         encerra_conexao(conn)
         
-def pegar_dados_tabela(banco, tabela):
+def pegar_dados(banco, tabela):
     try:
         if banco == "primeiro":
             conn = conecta_primeiro()
@@ -33,12 +31,12 @@ def pegar_dados_tabela(banco, tabela):
         dados = cursor.fetchall()
         return dados
     except Exception as e:
-        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        print(f"Erro ao pegar os dados da tabela {tabela} no banco do {banco}: {e}")
         return None
     finally:
         encerra_conexao(conn)
 
-def pegar_nome_colunas(tabela):
+def pegar_colunas(tabela):
     try:
         conn = conecta_primeiro()
         cursor = conn.cursor()
