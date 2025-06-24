@@ -17,7 +17,7 @@ def conecta_primeiro():
         print("Conectado no postgres com sucesso!!")
         return conn
     except Error as e:
-        print(f"Ocorreu um erro ao tentar conectar no banco de dados: {e}")
+        print(f"Ocorreu um erro ao tentar conectar ao banco de dados do primeiro: {e}")
 
 def conecta_segundo():
     try:
@@ -31,7 +31,7 @@ def conecta_segundo():
         print("Conectado no postgres com sucesso!!")
         return conn
     except Error as e:
-        print(f"Ocorreu um erro ao tentar conectar no banco de dados: {e}")
+        print(f"Ocorreu um erro ao tentar conectar ao banco de dados do segundo: {e}")
 
 def encerra_conexao(conn):
     if conn:
