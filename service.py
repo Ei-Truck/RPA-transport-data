@@ -30,6 +30,7 @@ def pegar_id_inativos(tabela):
         return None
     finally:
         encerra_conexao(conn)
+
 def pegar_dados_atualizados(tabela, colunas):
     try:
         conn = conecta_primeiro()
@@ -46,20 +47,17 @@ def pegar_dados_atualizados(tabela, colunas):
         return None
     finally:
         encerra_conexao(conn)
+
+def pegar_id_atualizados(tabela):
     try:
-        if banco == "primeiro":
-            conn = conecta_primeiro()
-        elif banco == "segundo":
-            conn = conecta_segundo()
-        else:
-            raise ValueError("Banco de dados inválido. Use 'primeiro' ou 'segundo'.")
+        conn = conecta_primeiro()
         cursor = conn.cursor()
-        comando = f"SELECT * FROM {tabela};"
+        comando = f"SELECT id FROM {tabela} where isupdated = true;"
         cursor.execute(comando)
         dados = cursor.fetchall()
-        return dados
+        return [dado[0] for dado in dados]
     except Exception as e:
-        print(f"Erro ao pegar os dados da tabela {tabela} no banco do {banco}: {e}")
+        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
