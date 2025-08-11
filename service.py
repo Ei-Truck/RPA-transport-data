@@ -1,19 +1,27 @@
 from database import conecta_primeiro, conecta_segundo, encerra_conexao
 
 def inserir_dados(dados, tabela, values):
+        
+def pegar_dados_para_trasferir(tabela, colunas):
     try:
-        conn = conecta_segundo()
+        conn = conecta_primeiro()
         cursor = conn.cursor()
-        quantidade_parametros = f"({', '.join(['%s'] * len(values))})"
-        for i in range(len(values)):
+        for i in range(len(colunas)):
             nomes_colunas = ", "
             nomes_colunas = f"({nomes_colunas.join([values[i]])})"
         comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
         cursor.execute(comando, dados)
         conn.commit()
         print("Dados inseridos com sucesso!")
+            nomes_colunas = f"({nomes_colunas.join([colunas[i]])})"
+        comando = f"SELECT {nomes_colunas} FROM {tabela} where transaction_made = false;"
+        cursor.execute(comando)
+        dados = cursor.fetchall()
+        return [dado[0] for dado in dados]
     except Exception as e:
         print(f"Erro ao inserir dados: {e}")
+        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        return None
     finally:
         encerra_conexao(conn)
         
