@@ -117,6 +117,7 @@ def inserir_dados(dados, tabela, colunas):
         conn.commit()
         ids = pegar_id_transferir(tabela)
         atualizar_campos('transaction_made', tabela, 'true', ids)
+        print('Dados inseridos com sucesso!')
     except Exception as e:
         print(f"Erro ao inserir dados: {e}")
     finally:
@@ -131,10 +132,10 @@ def atualizar_dados(dados, tabela, colunas, id):
             nomes_colunas = ", "
             nomes_colunas = nomes_colunas.join([f'{colunas[i]} = %s'])
         comando = f"UPDATE {tabela} SET {nomes_colunas} WHERE id = %s;"
-        print(comando)
         cursor.execute(comando, dados)
         conn.commit()
         atualizar_campo('isupdated', tabela, 'false', id)
+        print('Dados atualizados com sucesso!')
     except Exception as e:
         print(f"Erro ao atualizar dados: {e}")
     finally:
@@ -150,6 +151,7 @@ def inativar_dados(ids, tabela):
         conn.commit()
         atualizar_campos('isinactive', 'teste', 'false', ids)
         atualizar_campos('isdeleted', 'teste', 'true', ids)
+        print('Dados inativados com sucesso!')
     except Exception as e:
         print(f"Erro ao inativar dados: {e}")
     finally:
