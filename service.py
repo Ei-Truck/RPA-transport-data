@@ -144,5 +144,21 @@ def atualizar_dados(dados, tabela, colunas, id):
     finally:
         encerra_conexao(conn)
 
+def inativar_dados(ids, tabela):
+    try:
+        conn = conecta_segundo()
+        cursor = conn.cursor()
+        quantidade_parametros = f"{', '.join(['%s'] * len(ids))}"
+        comando = f"update {tabela} SET isdeleted = true WHERE id in ({quantidade_parametros});"
+        cursor.execute(comando, ids)
+        conn.commit()
+        print("Dados inativados com sucesso!")
+        atualizar_campos('isinactive', 'teste', 'false', ids)
+        atualizar_campos('isdeleted', 'teste', 'true', ids)
+    except Exception as e:
+        print(f"Erro ao inativar dados: {e}")
+    finally:
+        encerra_conexao(conn)
+
     finally:
         encerra_conexao(conn)
