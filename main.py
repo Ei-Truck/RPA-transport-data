@@ -1,40 +1,36 @@
 from service import pegar_dados_para_trasferir, pegar_id_inativos, pegar_id_atualizados, pegar_id_transferir, pegar_colunas, pegar_dados_atualizados, inativar_dados, inserir_dados, atualizar_dados, pegar_tabelas
 
-# def atualizar_banco(tabela):
-#     dados_primeiro = pegar_dados("primeiro", tabela)
-#     dados_segundo = pegar_dados("segundo", tabela)
-
-#     quantidade_primeiro = len(dados_primeiro)
-#     quantidade_segundo = len(dados_segundo)
-
-#     print(f"Quantidade de dados na tabela '{tabela}' do primeiro banco: {quantidade_primeiro}")
-#     print(f"Quantidade de dados na tabela '{tabela}' do segundo banco: {quantidade_segundo}")
-
-#     if quantidade_primeiro > quantidade_segundo:
-#         print("Inserindo novos dados no segundo banco...")
-#         nomes_colunas = pegar_colunas(tabela)
-#         nomes_colunas_sem_id = [coluna for coluna in nomes_colunas if nomes_colunas.index(coluna) != 0]
-#         print(f"Nomes das colunas: {nomes_colunas}")
-#         dados_primeiro_sem_id = [dado[1:] for dado in dados_primeiro] 
-#         dados_a_inserir = [dado for dado in dados_primeiro_sem_id if dado not in dados_segundo]
-#         inserir_dados(dados_a_inserir, tabela, nomes_colunas_sem_id)
-#     else:
-#         print("O banco já está atualizado.")
-
-# pegar lista de tabelas:
-# print(pegar_tabelas('public'))
-
-# transferir
-# print(pegar_dados_para_trasferir('teste', pegar_colunas('teste')))
-# print(pegar_id_transferir('teste'))
-# inserir_dados(pegar_dados_para_trasferir('teste', pegar_colunas('teste')), 'teste', pegar_colunas('teste'))
-
-# inativar
-# print(pegar_id_inativos('teste'))
-# inativar_dados(pegar_id_inativos('teste'), 'teste')
-
-# print(pegar_id_atualizados('teste'))
-# ids = pegar_id_atualizados('teste')
-# print(pegar_dados_atualizados('teste', pegar_colunas('teste')))
-# for id in ids:
-#     atualizar_dados(pegar_dados_atualizados('teste', pegar_colunas('teste')), 'teste', pegar_colunas('teste'), id)
+def atualizar_banco():
+    lista_tabelas = pegar_tabelas('public')
+    for i in range(len(lista_tabelas)):
+            string_tabelas = ", "
+            string_tabelas = f"{string_tabelas.join([lista_tabelas[i]])}"
+    print(f'Começando o procedimento nas tabelas: {string_tabelas}')
+    for tabela in lista_tabelas:
+        print(f'Tabela: {tabela}')
+        #Inserindo dados
+        print('Inserindo dados...')
+        transferir = pegar_dados_para_trasferir(tabela, pegar_colunas(tabela))
+        if len(transferir) > 0:
+            inserir_dados(transferir, tabela, pegar_colunas(tabela))
+        else:
+            print('Nenhum dado a ser transferido')
+        #Deletando dados
+        print('Inativando dados...')
+        inativos = pegar_id_inativos(tabela)
+        if len(inativos) > 0:
+            inativar_dados(inativos, tabela)
+        else:
+            print('Nenhum dado inativo')
+        #Atualizando dados um por um
+        print('Atualizando dados...')
+        ids = pegar_id_atualizados(tabela)
+        if len(ids) > 0:
+            for id in ids:
+                print(f'Id: {id}')
+                atualizar_dados(pegar_dados_atualizados(tabela, pegar_colunas(tabela)), tabela, pegar_colunas(tabela), id)
+        else:
+             print('Nenhum dado a ser atualizado')
+    print('Banco atualizado!')
+   
+atualizar_banco()
