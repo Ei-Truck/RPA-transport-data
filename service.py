@@ -115,11 +115,8 @@ def inserir_dados(dados, tabela, colunas):
         comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
         cursor.execute(comando, dados)
         conn.commit()
-        print("Dados inseridos com sucesso!")
-        print("Atualizando campo no banco do primeiro...")
         ids = pegar_id_transferir(tabela)
         atualizar_campos('transaction_made', tabela, 'true', ids)
-        print("Dados atualizados com sucesso!")
     except Exception as e:
         print(f"Erro ao inserir dados: {e}")
     finally:
@@ -137,7 +134,6 @@ def atualizar_dados(dados, tabela, colunas, id):
         print(comando)
         cursor.execute(comando, dados)
         conn.commit()
-        print("Dados atualizados com sucesso!")
         atualizar_campo('isupdated', tabela, 'false', id)
     except Exception as e:
         print(f"Erro ao atualizar dados: {e}")
@@ -152,7 +148,6 @@ def inativar_dados(ids, tabela):
         comando = f"update {tabela} SET isdeleted = true WHERE id in ({quantidade_parametros});"
         cursor.execute(comando, ids)
         conn.commit()
-        print("Dados inativados com sucesso!")
         atualizar_campos('isinactive', 'teste', 'false', ids)
         atualizar_campos('isdeleted', 'teste', 'true', ids)
     except Exception as e:
@@ -178,7 +173,6 @@ def atualizar_campo(campo, tabela, valor, id):
         conn = conecta_primeiro()
         cursor = conn.cursor()
         comando = f"UPDATE {tabela} SET {campo} = {valor} WHERE id = {id}"
-        print(comando)
         cursor.execute(comando)
         conn.commit()
     except Exception as e:
