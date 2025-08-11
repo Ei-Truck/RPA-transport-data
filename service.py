@@ -173,5 +173,15 @@ def atualizar_campos(campo, tabela, valor, ids):
     finally:
         encerra_conexao(conn)
 
+def atualizar_campo(campo, tabela, valor, id):
+    try:
+        conn = conecta_primeiro()
+        cursor = conn.cursor()
+        comando = f"UPDATE {tabela} SET {campo} = {valor} WHERE id = {id}"
+        print(comando)
+        cursor.execute(comando)
+        conn.commit()
+    except Exception as e:
+        print(f"Erro ao atualizar campo: {e}")
     finally:
         encerra_conexao(conn)
