@@ -89,3 +89,19 @@ def pegar_colunas(tabela):
         return None
     finally:
         encerra_conexao(conn)
+
+def pegar_tabelas(schema):
+    try:
+        conn = conecta_primeiro()
+        cursor = conn.cursor()
+        comando = f"select table_name from information_schema.tables where table_schema = '{schema}';"
+        cursor.execute(comando)
+        tabelas = cursor.fetchall()
+        return [tabela[0] for tabela in tabelas]
+    except Exception as e:
+        print(f"Erro ao pegar tabelas do shema {schema}: {e}")
+        return None
+    finally:
+        encerra_conexao(conn)
+    finally:
+        encerra_conexao(conn)
