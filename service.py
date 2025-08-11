@@ -4,8 +4,7 @@ def pegar_dados_para_trasferir(tabela, colunas):
     try:
         conn = conecta_primeiro()
         cursor = conn.cursor()
-        for i in range(len(colunas)):
-            nomes_colunas = f"({', '.join([colunas[i]])})"
+        nomes_colunas = f"({', '.join(colunas)})"
         comando = f"SELECT {nomes_colunas} FROM {tabela} where transaction_made = false;"
         cursor.execute(comando)
         dados = cursor.fetchall()
@@ -48,8 +47,7 @@ def pegar_dados_atualizados(tabela, colunas):
     try:
         conn = conecta_primeiro()
         cursor = conn.cursor()
-        for i in range(len(colunas)):
-            nomes_colunas = f"({', '.join([colunas[i]])})"
+        nomes_colunas = f"({', '.join(colunas)})"
         comando = f"SELECT {nomes_colunas} FROM {tabela} where isupdated = true;"
         cursor.execute(comando)
         dados = cursor.fetchall()
@@ -107,8 +105,7 @@ def inserir_dados(dados, tabela, colunas):
         conn = conecta_segundo()
         cursor = conn.cursor()
         quantidade_parametros = f"{', '.join(['(%s)'] * len(dados))}"
-        for i in range(len(colunas)):
-            nomes_colunas = f"({', '.join([colunas[i]])})"
+        nomes_colunas = f"({', '.join(colunas)})"
         comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
         cursor.execute(comando, dados)
         conn.commit()
@@ -125,8 +122,7 @@ def atualizar_dados(dados, tabela, colunas, id):
         conn = conecta_segundo()
         cursor = conn.cursor()
         dados.append(id)
-        for i in range(len(colunas)):
-            nomes_colunas = ', '.join([f'{colunas[i]} = %s'])
+        nomes_colunas = ', '.join(f'{coluna} = %s' for coluna in colunas)
         comando = f"UPDATE {tabela} SET {nomes_colunas} WHERE id = %s;"
         cursor.execute(comando, dados)
         conn.commit()
@@ -141,7 +137,7 @@ def inativar_dados(ids, tabela):
     try:
         conn = conecta_segundo()
         cursor = conn.cursor()
-        quantidade_parametros = f"{', '.join(['%s'] * len(ids))}"
+        quantidade_parametros = ', '.join(['%s'] * len(ids))
         comando = f"update {tabela} SET isdeleted = true WHERE id in ({quantidade_parametros});"
         cursor.execute(comando, ids)
         conn.commit()
