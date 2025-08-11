@@ -17,12 +17,27 @@ def pegar_dados_para_trasferir(tabela, colunas):
     finally:
         encerra_conexao(conn)
         
-def pegar_dados(banco, tabela):
 def pegar_id_inativos(tabela):
     try:
         conn = conecta_primeiro()
         cursor = conn.cursor()
         comando = f"SELECT id FROM {tabela} where isinactive = true;"
+        cursor.execute(comando)
+        dados = cursor.fetchall()
+        return [dado[0] for dado in dados]
+    except Exception as e:
+        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        return None
+    finally:
+        encerra_conexao(conn)
+def pegar_dados_atualizados(tabela, colunas):
+    try:
+        conn = conecta_primeiro()
+        cursor = conn.cursor()
+        for i in range(len(colunas)):
+            nomes_colunas = ", "
+            nomes_colunas = f"({nomes_colunas.join([colunas[i]])})"
+        comando = f"SELECT {nomes_colunas} FROM {tabela} where isupdated = true;"
         cursor.execute(comando)
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
