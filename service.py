@@ -83,7 +83,7 @@ def pegar_colunas(tabela):
         comando = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{tabela}';"
         cursor.execute(comando)
         colunas = cursor.fetchall()
-        return [coluna[0] for coluna in colunas]
+        return [coluna[0] for coluna in colunas if coluna[0] != 'id' and coluna[0] != 'transaction_made' and coluna[0] != 'isupdated' and coluna[0] != 'isinactive']
     except Exception as e:
         print(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
         return None
