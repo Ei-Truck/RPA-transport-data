@@ -5,14 +5,13 @@ def pegar_dados_para_trasferir(tabela, colunas):
         conn = conecta_primeiro()
         cursor = conn.cursor()
         for i in range(len(colunas)):
-            nomes_colunas = ", "
-            nomes_colunas = f"({nomes_colunas.join([colunas[i]])})"
+            nomes_colunas = f"({', '.join([colunas[i]])})"
         comando = f"SELECT {nomes_colunas} FROM {tabela} where transaction_made = false;"
         cursor.execute(comando)
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
     except Exception as e:
-        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        print(f"Erro ao pegar os dados para transferir da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
@@ -26,7 +25,7 @@ def pegar_id_transferir(tabela):
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
     except Exception as e:
-        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        print(f"Erro ao pegar o id para transferir da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
@@ -40,7 +39,7 @@ def pegar_id_inativos(tabela):
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
     except Exception as e:
-        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        print(f"Erro ao pegar o id dos inativos da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
@@ -50,14 +49,13 @@ def pegar_dados_atualizados(tabela, colunas):
         conn = conecta_primeiro()
         cursor = conn.cursor()
         for i in range(len(colunas)):
-            nomes_colunas = ", "
-            nomes_colunas = f"({nomes_colunas.join([colunas[i]])})"
+            nomes_colunas = f"({', '.join([colunas[i]])})"
         comando = f"SELECT {nomes_colunas} FROM {tabela} where isupdated = true;"
         cursor.execute(comando)
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
     except Exception as e:
-        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        print(f"Erro ao pegar os dados atualizados da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
@@ -71,7 +69,7 @@ def pegar_id_atualizados(tabela):
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
     except Exception as e:
-        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        print(f"Erro ao pegar o id dos atualizados da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
@@ -110,8 +108,7 @@ def inserir_dados(dados, tabela, colunas):
         cursor = conn.cursor()
         quantidade_parametros = f"{', '.join(['(%s)'] * len(dados))}"
         for i in range(len(colunas)):
-            nomes_colunas = ", "
-            nomes_colunas = f"({nomes_colunas.join([colunas[i]])})"
+            nomes_colunas = f"({', '.join([colunas[i]])})"
         comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
         cursor.execute(comando, dados)
         conn.commit()
@@ -129,8 +126,7 @@ def atualizar_dados(dados, tabela, colunas, id):
         cursor = conn.cursor()
         dados.append(id)
         for i in range(len(colunas)):
-            nomes_colunas = ", "
-            nomes_colunas = nomes_colunas.join([f'{colunas[i]} = %s'])
+            nomes_colunas = ', '.join([f'{colunas[i]} = %s'])
         comando = f"UPDATE {tabela} SET {nomes_colunas} WHERE id = %s;"
         cursor.execute(comando, dados)
         conn.commit()
