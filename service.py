@@ -103,5 +103,26 @@ def pegar_tabelas(schema):
         return None
     finally:
         encerra_conexao(conn)
+
+def inserir_dados(dados, tabela, colunas):
+    try:
+        conn = conecta_segundo()
+        cursor = conn.cursor()
+        quantidade_parametros = f"{', '.join(['(%s)'] * len(dados))}"
+        for i in range(len(colunas)):
+            nomes_colunas = ", "
+            nomes_colunas = f"({nomes_colunas.join([colunas[i]])})"
+        comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
+        cursor.execute(comando, dados)
+        conn.commit()
+        print("Dados inseridos com sucesso!")
+        print("Atualizando campo no banco do primeiro...")
+        ids = pegar_id_transferir(tabela)
+        atualizar_campos('transaction_made', tabela, 'true', ids)
+        print("Dados atualizados com sucesso!")
+    except Exception as e:
+        print(f"Erro ao inserir dados: {e}")
+    finally:
+        encerra_conexao(conn)
     finally:
         encerra_conexao(conn)
