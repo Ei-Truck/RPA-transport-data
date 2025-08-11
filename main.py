@@ -34,4 +34,6 @@ def atualizar_banco():
              print('Nenhum dado a ser atualizado')
     print('Banco atualizado!')
    
+
+#Falta automatizar, esperar para ver na aula da mryna
 atualizar_banco()
