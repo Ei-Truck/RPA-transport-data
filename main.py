@@ -2,8 +2,7 @@ from service import pegar_dados_para_trasferir, pegar_id_inativos, pegar_id_atua
 
 def atualizar_banco():
     lista_tabelas = pegar_tabelas('public')
-    for i in range(len(lista_tabelas)):
-            string_tabelas = f"{', '.join([lista_tabelas[i]])}"
+    string_tabelas = ', '.join(lista_tabelas)
     print(f'Começando o procedimento nas tabelas: {string_tabelas}')
     for tabela in lista_tabelas:
         print(f'Tabela: {tabela}')
