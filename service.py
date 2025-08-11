@@ -124,5 +124,25 @@ def inserir_dados(dados, tabela, colunas):
         print(f"Erro ao inserir dados: {e}")
     finally:
         encerra_conexao(conn)
+
+def atualizar_dados(dados, tabela, colunas, id):
+    try:
+        conn = conecta_segundo()
+        cursor = conn.cursor()
+        dados.append(id)
+        for i in range(len(colunas)):
+            nomes_colunas = ", "
+            nomes_colunas = nomes_colunas.join([f'{colunas[i]} = %s'])
+        comando = f"UPDATE {tabela} SET {nomes_colunas} WHERE id = %s;"
+        print(comando)
+        cursor.execute(comando, dados)
+        conn.commit()
+        print("Dados atualizados com sucesso!")
+        atualizar_campo('isupdated', tabela, 'false', id)
+    except Exception as e:
+        print(f"Erro ao atualizar dados: {e}")
+    finally:
+        encerra_conexao(conn)
+
     finally:
         encerra_conexao(conn)
