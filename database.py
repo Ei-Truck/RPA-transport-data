@@ -14,7 +14,6 @@ def conecta_primeiro():
             port=os.getenv('port'),
             database=os.getenv('database_primeiro')
         )
-        print("Conectado no postgres com sucesso!!")
         return conn
     except Error as e:
         print(f"Ocorreu um erro ao tentar conectar ao banco de dados do primeiro: {e}")
@@ -28,7 +27,6 @@ def conecta_segundo():
             port=os.getenv('port'),
             database=os.getenv('database_segundo')
         )
-        print("Conectado no postgres com sucesso!!")
         return conn
     except Error as e:
         print(f"Ocorreu um erro ao tentar conectar ao banco de dados do segundo: {e}")
@@ -36,4 +34,3 @@ def conecta_segundo():
 def encerra_conexao(conn):
     if conn:
         conn.close()
-        print("Conexão encerrada com o banco de dados!")
