@@ -160,5 +160,18 @@ def inativar_dados(ids, tabela):
     finally:
         encerra_conexao(conn)
 
+def atualizar_campos(campo, tabela, valor, ids):
+    try:
+        conn = conecta_primeiro()
+        cursor = conn.cursor()
+        quantidade_parametros = f"{', '.join(['%s'] * len(ids))}"
+        comando = f"UPDATE {tabela} SET {campo} = {valor} WHERE id in ({quantidade_parametros});"
+        cursor.execute(comando, ids)
+        conn.commit()
+    except Exception as e:
+        print(f"Erro ao atualizar campo: {e}")
+    finally:
+        encerra_conexao(conn)
+
     finally:
         encerra_conexao(conn)
