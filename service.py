@@ -16,7 +16,21 @@ def pegar_dados_para_trasferir(tabela, colunas):
         return None
     finally:
         encerra_conexao(conn)
-        
+
+def pegar_id_transferir(tabela):
+    try:
+        conn = conecta_primeiro()
+        cursor = conn.cursor()
+        comando = f"SELECT id FROM {tabela} where transaction_made = false;"
+        cursor.execute(comando)
+        dados = cursor.fetchall()
+        return [dado[0] for dado in dados]
+    except Exception as e:
+        print(f"Erro ao pegar os dados da tabela {tabela}: {e}")
+        return None
+    finally:
+        encerra_conexao(conn)
+
 def pegar_id_inativos(tabela):
     try:
         conn = conecta_primeiro()
