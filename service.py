@@ -173,3 +173,23 @@ def atualizar_campo(campo, tabela, valor, id):
         print(f"Erro ao atualizar campo: {e}")
     finally:
         encerra_conexao(conn)
+
+# Metodos para facilitar a especificação futura do banco
+        
+# def lookup_tabela(tabela):
+#     match tabela:
+#         case 'a':
+#             return 'A'
+#         case 'b':
+#             return 'B'
+#         case _:
+#             return tabela
+        
+# def lookup_campo(coluna):
+#     match coluna:
+#         case 'a':
+#             return 'A'
+#         case 'b':
+#             return 'B'
+#         case _:
+#             return coluna
