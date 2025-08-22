@@ -15,6 +15,20 @@ def pegar_dados(tabela, colunas):
     finally:
         encerra_conexao(conn)
 
+def chamar_procedure(tabela):
+    try:
+        procedure = f"SP_Atualiza{tabela.capitalize()}"
+        conn = conecta_segundo()
+        cursor = conn.cursor()
+        comando = f"CALL {procedure}();"
+        cursor.execute(comando)
+        conn.commit()
+        delete_tabela_temp(tabela)
+    except Exception as e:
+        print(f"Erro ao chamar {procedure}(): {e}")
+    finally:
+        encerra_conexao(conn)
+
 def criar_tabela_temp(tabela, colunas_tipo):
     try:
         conn = conecta_segundo()
