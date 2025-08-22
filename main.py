@@ -8,11 +8,11 @@ def atualizar_banco():
         print(f'Tabela: {tabela}')
         # Pegando colunas da tabela
         colunas = pegar_colunas(tabela)
-        # Criar tabela temp
+        # Criando tabela temp
         criar_tabela_temp(tabela, pegar_colunas_tipo(tabela))
-        # Inserir na tabela temp
+        # Inserindo dados na tabela temp
         inserir_dados(pegar_dados(tabela, colunas), tabela, colunas)
-        # Puxar proc do banco
+        # Puxando procedure
         chamar_procedure(tabela)
     print('Banco atualizado!')
    
