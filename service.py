@@ -28,6 +28,18 @@ def criar_tabela_temp(tabela, colunas_tipo):
     finally:
         encerra_conexao(conn)
 
+def delete_tabela_temp(tabela):
+    try:
+        conn = conecta_segundo()
+        cursor = conn.cursor()
+        comando = f"DROP TABLE IF EXISTS {tabela}_temp;"
+        cursor.execute(comando)
+        conn.commit()
+    except Exception as e:
+        print(f"Erro ao deletar a tabela temporária {tabela}_temp: {e}")
+    finally:
+        encerra_conexao(conn)
+
 def pegar_colunas(tabela):
     try:
         conn = conecta_primeiro()
