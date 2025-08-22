@@ -1,11 +1,11 @@
 from database import conecta_primeiro, conecta_segundo, encerra_conexao
         
-def pegar_dados_para_trasferir(tabela, colunas):
+def pegar_dados(tabela, colunas):
     try:
         conn = conecta_primeiro()
         cursor = conn.cursor()
         nomes_colunas = f"({', '.join(colunas)})"
-        comando = f"SELECT {nomes_colunas} FROM {tabela} where transaction_made = false;"
+        comando = f"SELECT {nomes_colunas} FROM {tabela};"
         cursor.execute(comando)
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
