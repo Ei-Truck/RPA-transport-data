@@ -1,4 +1,4 @@
-from service import pegar_dados_para_trasferir, pegar_id_inativos, pegar_id_atualizados, pegar_colunas, pegar_dados_atualizados, inativar_dados, inserir_dados, atualizar_dados, pegar_tabelas
+from service import pegar_dados, pegar_tabelas, pegar_colunas, criar_tabela_temp, inserir_dados, chamar_procedure, pegar_colunas_tipo
 
 def atualizar_banco():
     lista_tabelas = pegar_tabelas('public')
@@ -9,11 +9,11 @@ def atualizar_banco():
         # Pegando colunas da tabela
         colunas = pegar_colunas(tabela)
         # Criar tabela temp
-
+        criar_tabela_temp(tabela, pegar_colunas_tipo(tabela))
         # Inserir na tabela temp
-
+        inserir_dados(pegar_dados(tabela, colunas), tabela, colunas)
         # Puxar proc do banco
+        chamar_procedure(tabela)
     print('Banco atualizado!')
    
-
 atualizar_banco()
