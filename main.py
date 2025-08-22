@@ -8,29 +8,11 @@ def atualizar_banco():
         print(f'Tabela: {tabela}')
         # Pegando colunas da tabela
         colunas = pegar_colunas(tabela)
-        #Inserindo dados
-        print('Inserindo dados...')
-        transferir = pegar_dados_para_trasferir(tabela, colunas)
-        if len(transferir) > 0:
-            inserir_dados(transferir, tabela, colunas)
-        else:
-            print('Nenhum dado a ser transferido')
-        #Deletando dados
-        print('Inativando dados...')
-        inativos = pegar_id_inativos(tabela)
-        if len(inativos) > 0:
-            inativar_dados(inativos, tabela)
-        else:
-            print('Nenhum dado inativo')
-        #Atualizando dados um por um
-        print('Atualizando dados...')
-        ids = pegar_id_atualizados(tabela)
-        if len(ids) > 0:
-            for id in ids:
-                print(f'Id: {id}')
-                atualizar_dados(pegar_dados_atualizados(tabela, colunas), tabela, colunas, id)
-        else:
-             print('Nenhum dado a ser atualizado')
+        # Criar tabela temp
+
+        # Inserir na tabela temp
+
+        # Puxar proc do banco
     print('Banco atualizado!')
    
 
