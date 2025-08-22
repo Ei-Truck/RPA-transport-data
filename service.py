@@ -15,63 +15,6 @@ def pegar_dados_para_trasferir(tabela, colunas):
     finally:
         encerra_conexao(conn)
 
-def pegar_id_transferir(tabela):
-    try:
-        conn = conecta_primeiro()
-        cursor = conn.cursor()
-        comando = f"SELECT id FROM {tabela} where transaction_made = false;"
-        cursor.execute(comando)
-        dados = cursor.fetchall()
-        return [dado[0] for dado in dados]
-    except Exception as e:
-        print(f"Erro ao pegar o id para transferir da tabela {tabela}: {e}")
-        return None
-    finally:
-        encerra_conexao(conn)
-
-def pegar_id_inativos(tabela):
-    try:
-        conn = conecta_primeiro()
-        cursor = conn.cursor()
-        comando = f"SELECT id FROM {tabela} where isinactive = true;"
-        cursor.execute(comando)
-        dados = cursor.fetchall()
-        return [dado[0] for dado in dados]
-    except Exception as e:
-        print(f"Erro ao pegar o id dos inativos da tabela {tabela}: {e}")
-        return None
-    finally:
-        encerra_conexao(conn)
-
-def pegar_dados_atualizados(tabela, colunas):
-    try:
-        conn = conecta_primeiro()
-        cursor = conn.cursor()
-        nomes_colunas = f"({', '.join(colunas)})"
-        comando = f"SELECT {nomes_colunas} FROM {tabela} where isupdated = true;"
-        cursor.execute(comando)
-        dados = cursor.fetchall()
-        return [dado[0] for dado in dados]
-    except Exception as e:
-        print(f"Erro ao pegar os dados atualizados da tabela {tabela}: {e}")
-        return None
-    finally:
-        encerra_conexao(conn)
-
-def pegar_id_atualizados(tabela):
-    try:
-        conn = conecta_primeiro()
-        cursor = conn.cursor()
-        comando = f"SELECT id FROM {tabela} where isupdated = true;"
-        cursor.execute(comando)
-        dados = cursor.fetchall()
-        return [dado[0] for dado in dados]
-    except Exception as e:
-        print(f"Erro ao pegar o id dos atualizados da tabela {tabela}: {e}")
-        return None
-    finally:
-        encerra_conexao(conn)
-
 def pegar_colunas(tabela):
     try:
         conn = conecta_primeiro()
@@ -109,87 +52,8 @@ def inserir_dados(dados, tabela, colunas):
         comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
         cursor.execute(comando, dados)
         conn.commit()
-        ids = pegar_id_transferir(tabela)
-        atualizar_campos('transaction_made', tabela, 'true', ids)
         print('Dados inseridos com sucesso!')
     except Exception as e:
         print(f"Erro ao inserir dados: {e}")
     finally:
         encerra_conexao(conn)
-
-def atualizar_dados(dados, tabela, colunas, id):
-    try:
-        conn = conecta_segundo()
-        cursor = conn.cursor()
-        dados.append(id)
-        nomes_colunas = ', '.join(f'{coluna} = %s' for coluna in colunas)
-        comando = f"UPDATE {tabela} SET {nomes_colunas} WHERE id = %s;"
-        cursor.execute(comando, dados)
-        conn.commit()
-        atualizar_campo('isupdated', tabela, 'false', id)
-        print('Dados atualizados com sucesso!')
-    except Exception as e:
-        print(f"Erro ao atualizar dados: {e}")
-    finally:
-        encerra_conexao(conn)
-
-def inativar_dados(ids, tabela):
-    try:
-        conn = conecta_segundo()
-        cursor = conn.cursor()
-        quantidade_parametros = ', '.join(['%s'] * len(ids))
-        comando = f"update {tabela} SET isdeleted = true WHERE id in ({quantidade_parametros});"
-        cursor.execute(comando, ids)
-        conn.commit()
-        atualizar_campos('isinactive', 'teste', 'false', ids)
-        atualizar_campos('isdeleted', 'teste', 'true', ids)
-        print('Dados inativados com sucesso!')
-    except Exception as e:
-        print(f"Erro ao inativar dados: {e}")
-    finally:
-        encerra_conexao(conn)
-
-def atualizar_campos(campo, tabela, valor, ids):
-    try:
-        conn = conecta_primeiro()
-        cursor = conn.cursor()
-        quantidade_parametros = f"{', '.join(['%s'] * len(ids))}"
-        comando = f"UPDATE {tabela} SET {campo} = {valor} WHERE id in ({quantidade_parametros});"
-        cursor.execute(comando, ids)
-        conn.commit()
-    except Exception as e:
-        print(f"Erro ao atualizar campo: {e}")
-    finally:
-        encerra_conexao(conn)
-
-def atualizar_campo(campo, tabela, valor, id):
-    try:
-        conn = conecta_primeiro()
-        cursor = conn.cursor()
-        comando = f"UPDATE {tabela} SET {campo} = {valor} WHERE id = {id}"
-        cursor.execute(comando)
-        conn.commit()
-    except Exception as e:
-        print(f"Erro ao atualizar campo: {e}")
-    finally:
-        encerra_conexao(conn)
-
-# Metodos para facilitar a especificação futura do banco
-        
-# def lookup_tabela(tabela):
-#     match tabela:
-#         case 'a':
-#             return 'A'
-#         case 'b':
-#             return 'B'
-#         case _:
-#             return tabela
-        
-# def lookup_campo(coluna):
-#     match coluna:
-#         case 'a':
-#             return 'A'
-#         case 'b':
-#             return 'B'
-#         case _:
-#             return coluna
