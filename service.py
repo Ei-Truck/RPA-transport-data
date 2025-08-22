@@ -63,10 +63,9 @@ def inserir_dados(dados, tabela, colunas):
         cursor = conn.cursor()
         quantidade_parametros = f"{', '.join(['(%s)'] * len(dados))}"
         nomes_colunas = f"({', '.join(colunas)})"
-        comando = f"INSERT INTO {tabela} {nomes_colunas} VALUES {quantidade_parametros};"
+        comando = f"INSERT INTO {tabela}_temp {nomes_colunas} VALUES {quantidade_parametros};"
         cursor.execute(comando, dados)
         conn.commit()
-        print('Dados inseridos com sucesso!')
     except Exception as e:
         print(f"Erro ao inserir dados: {e}")
     finally:
