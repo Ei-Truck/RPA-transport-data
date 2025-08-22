@@ -15,6 +15,19 @@ def pegar_dados(tabela, colunas):
     finally:
         encerra_conexao(conn)
 
+def criar_tabela_temp(tabela, colunas_tipo):
+    try:
+        conn = conecta_segundo()
+        cursor = conn.cursor()
+        campos = f"{', '.join(f'{c} {t}' for c, t in colunas_tipo)}"
+        comando = f"create table {tabela}_temp(id serial, {campos});"
+        cursor.execute(comando)
+        conn.commit()
+    except Exception as e:
+        print(f"Erro ao criar {tabela}_temp: {e}")
+    finally:
+        encerra_conexao(conn)
+
 def pegar_colunas(tabela):
     try:
         conn = conecta_primeiro()
