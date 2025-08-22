@@ -23,21 +23,10 @@
 
 **EM INGLÊS, ESCREVA ASSIM**
 <br>
-tipo(escopo):pequena descrição
-
-✅ Exemplos:
-| Tipo       | Exemplo de mensagem                                       | Proposito                             |
-| ---------- | --------------------------------------------------------- | ------------------------------------- |
-| `feat`     | `feat(auth): add JWT authentication to login system`      | Introduces a new feature              |
-| `fix`      | `fix(api): correct 500 error when saving user`            | Fixes a bug                           |
-| `docs`     | `docs(readme): update usage section with new command`     | Changes only in documentation         |
-| `style`    | `style(button): adjust padding and color for consistency` | Formatting changes (no code logic)    |
-| `refactor` | `refactor(db): optimize query logic for performance`      | Code refactoring (no behavior change) |
-| `chore`    | `chore(ci): add GitHub Actions for PR validation`         | Tooling/config/build process updates  |
-| `test`     | `test(api): add unit tests for user controller`           | Adding or updating tests              |
+### tipo(escopo):pequena descrição
 
 
-## 🏷️ Nome da PR
+### 🏷️ Nome da PR
 
 **Use o seguinte padrão no título da PR:**
 (Tipo)-(Versão)/o_que_foi_implementado_ou_corrigido
