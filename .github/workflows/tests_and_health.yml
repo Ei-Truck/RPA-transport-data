@@ -1,4 +1,4 @@
-name: Python application
+name: RPA Transport Data - Tests and Health
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  pipeline:
 
     runs-on: ubuntu-latest
 
