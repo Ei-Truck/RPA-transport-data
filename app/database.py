@@ -16,7 +16,7 @@ def conecta_primeiro():
             database=os.getenv("database_primeiro"),
         )
         return conn
-    except Error as e:
+    except Exception as e:
         print(f"Ocorreu um erro ao tentar conectar ao banco de dados do primeiro: {e}")
 
 
@@ -30,7 +30,7 @@ def conecta_segundo():
             database=os.getenv("database_segundo"),
         )
         return conn
-    except Error as e:
+    except Exception as e:
         print(f"Ocorreu um erro ao tentar conectar ao banco de dados do segundo: {e}")
 
 
