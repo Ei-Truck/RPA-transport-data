@@ -37,4 +37,4 @@ def test_encerra_conexao_fecha():
 
 
 def test_encerra_conexao_none():
-    database.encerra_conexao(None) 
+    database.encerra_conexao(None)
