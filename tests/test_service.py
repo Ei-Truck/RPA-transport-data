@@ -111,3 +111,84 @@ def test_inserir_dados(mock_conn_cursor):
     query, params = mock_cursor.execute.call_args[0]
     assert query.startswith("INSERT INTO clientes_temp (id) VALUES")
     assert params == dados
+
+def test_pegar_dados_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    # Simula erro no execute
+    mock_cursor.execute.side_effect = Exception("Erro no SELECT")
+
+    with patch("app.service.conecta_primeiro", return_value=mock_conn), \
+         patch("app.service.encerra_conexao"):
+        resultado = service.pegar_dados("tabela_teste", ["coluna1"])
+
+    # Deve retornar None se houver exceção
+    assert resultado is None
+
+
+def test_chamar_procedure_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    # Simula None retornando na conexão
+    with patch("app.service.conecta_segundo", return_value=None), \
+         patch("app.service.encerra_conexao"):
+        # Deve capturar AttributeError pois conn=None não tem cursor
+        service.chamar_procedure("usuarios")
+
+
+def test_criar_tabela_temp_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    mock_cursor.execute.side_effect = Exception("Erro no CREATE TABLE")
+
+    with patch("app.service.conecta_segundo", return_value=mock_conn), \
+         patch("app.service.encerra_conexao"):
+        service.criar_tabela_temp("clientes", [("nome", "varchar")])
+
+
+def test_delete_tabela_temp_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    mock_cursor.execute.side_effect = Exception("Erro no DROP TABLE")
+
+    with patch("app.service.conecta_segundo", return_value=mock_conn), \
+         patch("app.service.encerra_conexao"):
+        service.delete_tabela_temp("clientes")
+
+
+def test_pegar_colunas_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    mock_cursor.execute.side_effect = Exception("Erro no SELECT columns")
+
+    with patch("app.service.conecta_primeiro", return_value=mock_conn), \
+         patch("app.service.encerra_conexao"):
+        resultado = service.pegar_colunas("clientes")
+
+    assert resultado is None
+
+
+def test_pegar_colunas_tipo_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    mock_cursor.execute.side_effect = Exception("Erro no SELECT columns")
+
+    with patch("app.service.conecta_primeiro", return_value=mock_conn), \
+         patch("app.service.encerra_conexao"):
+        resultado = service.pegar_colunas_tipo("clientes")
+
+    assert resultado is None
+
+
+def test_pegar_tabelas_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    mock_cursor.execute.side_effect = Exception("Erro no SELECT tables")
+
+    with patch("app.service.conecta_primeiro", return_value=mock_conn), \
+         patch("app.service.encerra_conexao"):
+        resultado = service.pegar_tabelas("public")
+
+    assert resultado is None
+
+
+def test_inserir_dados_exception(mock_conn_cursor):
+    mock_conn, mock_cursor = mock_conn_cursor
+    mock_cursor.execute.side_effect = Exception("Erro no INSERT")
+
+    with patch("app.service.conecta_segundo", return_value=mock_conn), \
+         patch("app.service.encerra_conexao"):
+        service.inserir_dados([(1,)], "clientes", ["id"])
