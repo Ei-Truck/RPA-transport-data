@@ -1,5 +1,6 @@
-from database import conecta_primeiro, conecta_segundo, encerra_conexao
-        
+from app.database import conecta_primeiro, conecta_segundo, encerra_conexao
+
+
 def pegar_dados(tabela, colunas):
     try:
         conn = conecta_primeiro()
@@ -15,9 +16,10 @@ def pegar_dados(tabela, colunas):
     finally:
         encerra_conexao(conn)
 
+
 def chamar_procedure(tabela):
     try:
-        #Definir nome das procedures
+        # Definir nome das procedures
         procedure = f"SP_Atualiza{tabela.capitalize()}"
         conn = conecta_segundo()
         cursor = conn.cursor()
@@ -29,6 +31,7 @@ def chamar_procedure(tabela):
         print(f"Erro ao chamar {procedure}(): {e}")
     finally:
         encerra_conexao(conn)
+
 
 def criar_tabela_temp(tabela, colunas_tipo):
     try:
@@ -44,6 +47,7 @@ def criar_tabela_temp(tabela, colunas_tipo):
     finally:
         encerra_conexao(conn)
 
+
 def delete_tabela_temp(tabela):
     try:
         conn = conecta_segundo()
@@ -56,6 +60,7 @@ def delete_tabela_temp(tabela):
     finally:
         encerra_conexao(conn)
 
+
 def pegar_colunas(tabela):
     try:
         conn = conecta_primeiro()
@@ -63,12 +68,21 @@ def pegar_colunas(tabela):
         comando = f"SELECT column_name FROM information_schema.columns WHERE table_name = '{tabela}';"
         cursor.execute(comando)
         colunas = cursor.fetchall()
-        return [coluna[0] for coluna in colunas if coluna[0] != 'id' and coluna[0] != 'transaction_made' and coluna[0] != 'isupdated' and coluna[0] != 'isinactive' and coluna[0] != 'isdeleted']
+        return [
+            coluna[0]
+            for coluna in colunas
+            if coluna[0] != "id"
+            and coluna[0] != "transaction_made"
+            and coluna[0] != "isupdated"
+            and coluna[0] != "isinactive"
+            and coluna[0] != "isdeleted"
+        ]
     except Exception as e:
         print(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
+
 
 def pegar_colunas_tipo(tabela):
     try:
@@ -77,12 +91,21 @@ def pegar_colunas_tipo(tabela):
         comando = f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{tabela}';"
         cursor.execute(comando)
         colunas = cursor.fetchall()
-        return [coluna for coluna in colunas if coluna[0] != 'id' and coluna[0] != 'transaction_made' and coluna[0] != 'isupdated' and coluna[0] != 'isinactive' and coluna[0] != 'isdeleted']
+        return [
+            coluna
+            for coluna in colunas
+            if coluna[0] != "id"
+            and coluna[0] != "transaction_made"
+            and coluna[0] != "isupdated"
+            and coluna[0] != "isinactive"
+            and coluna[0] != "isdeleted"
+        ]
     except Exception as e:
         print(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
         return None
     finally:
         encerra_conexao(conn)
+
 
 def pegar_tabelas(schema):
     try:
@@ -98,13 +121,16 @@ def pegar_tabelas(schema):
     finally:
         encerra_conexao(conn)
 
+
 def inserir_dados(dados, tabela, colunas):
     try:
         conn = conecta_segundo()
         cursor = conn.cursor()
         quantidade_parametros = f"{', '.join(['(%s)'] * len(dados))}"
         nomes_colunas = f"({', '.join(colunas)})"
-        comando = f"INSERT INTO {tabela}_temp {nomes_colunas} VALUES {quantidade_parametros};"
+        comando = (
+            f"INSERT INTO {tabela}_temp {nomes_colunas} VALUES {quantidade_parametros};"
+        )
         cursor.execute(comando, dados)
         conn.commit()
     except Exception as e:
