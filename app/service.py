@@ -20,7 +20,7 @@ def pegar_dados(tabela, colunas):
 def chamar_procedure(tabela):
     try:
         # Definir nome das procedures
-        procedure = f"SP_Atualiza{tabela.capitalize()}"
+        procedure = f"prc_atualiza_{tabela}"
         conn = conecta_segundo()
         cursor = conn.cursor()
         comando = f"CALL {procedure}();"
