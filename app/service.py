@@ -1,4 +1,4 @@
-from app.database import conecta_primeiro, conecta_segundo, encerra_conexao
+from database import conecta_primeiro, conecta_segundo, encerra_conexao
 
 
 def pegar_dados(tabela, colunas):
@@ -35,8 +35,12 @@ def chamar_procedure(tabela):
 
 def criar_tabela_temp(tabela, colunas_tipo):
     try:
+        delete_tabela_temp(tabela)
         conn = conecta_segundo()
         cursor = conn.cursor()
+        for i in colunas_tipo:
+            if i[1] == "character varying":
+                colunas_tipo[colunas_tipo.index(i)] = (i[0], "text")
         campos = f"{', '.join(f'{c} {t}' for c, t in colunas_tipo)}"
         # Definir nome tabela temp
         comando = f"create table {tabela}_temp(id serial, {campos});"
