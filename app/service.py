@@ -35,7 +35,6 @@ def chamar_procedure(tabela):
 
 def criar_tabela_temp(tabela, colunas_tipo):
     try:
-        delete_tabela_temp(tabela)
         conn = conecta_segundo()
         cursor = conn.cursor()
         for i in colunas_tipo:
