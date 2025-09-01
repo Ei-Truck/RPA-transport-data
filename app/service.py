@@ -77,9 +77,8 @@ def pegar_colunas(tabela):
             for coluna in colunas
             if coluna[0] != "id"
             and coluna[0] != "transaction_made"
-            and coluna[0] != "isupdated"
-            and coluna[0] != "isinactive"
-            and coluna[0] != "isdeleted"
+            and coluna[0] != "updated_at"
+            and coluna[0] != "is_inactive"
         ]
     except Exception as e:
         print(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
