@@ -19,7 +19,6 @@ def pegar_dados(tabela, colunas):
 
 def chamar_procedure(tabela):
     try:
-        # Definir nome das procedures
         procedure = f"prc_atualiza_{tabela}"
         conn = conecta_segundo()
         cursor = conn.cursor()
@@ -41,7 +40,6 @@ def criar_tabela_temp(tabela, colunas_tipo):
             if i[1] == "character varying":
                 colunas_tipo[colunas_tipo.index(i)] = (i[0], "text")
         campos = f"{', '.join(f'{c} {t}' for c, t in colunas_tipo)}"
-        # Definir nome tabela temp
         comando = f"create table {tabela}_temp(id serial, {campos});"
         cursor.execute(comando)
         conn.commit()
