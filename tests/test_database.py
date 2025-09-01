@@ -1,5 +1,5 @@
 from unittest.mock import patch, MagicMock
-from app import database
+from app.database import database
 
 
 def test_conecta_primeiro_sucesso():
