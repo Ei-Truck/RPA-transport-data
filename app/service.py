@@ -19,8 +19,7 @@ def pegar_dados(tabela, colunas):
 
 def chamar_procedure(tabela):
     try:
-        # Definir nome das procedures
-        procedure = f"SP_Atualiza{tabela.capitalize()}"
+        procedure = f"prc_atualiza_{tabela}"
         conn = conecta_segundo()
         cursor = conn.cursor()
         comando = f"CALL {procedure}();"
@@ -37,8 +36,10 @@ def criar_tabela_temp(tabela, colunas_tipo):
     try:
         conn = conecta_segundo()
         cursor = conn.cursor()
+        for i in colunas_tipo:
+            if i[1] == "character varying":
+                colunas_tipo[colunas_tipo.index(i)] = (i[0], "text")
         campos = f"{', '.join(f'{c} {t}' for c, t in colunas_tipo)}"
-        # Definir nome tabela temp
         comando = f"create table {tabela}_temp(id serial, {campos});"
         cursor.execute(comando)
         conn.commit()
@@ -73,9 +74,8 @@ def pegar_colunas(tabela):
             for coluna in colunas
             if coluna[0] != "id"
             and coluna[0] != "transaction_made"
-            and coluna[0] != "isupdated"
-            and coluna[0] != "isinactive"
-            and coluna[0] != "isdeleted"
+            and coluna[0] != "updated_at"
+            and coluna[0] != "is_inactive"
         ]
     except Exception as e:
         print(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
