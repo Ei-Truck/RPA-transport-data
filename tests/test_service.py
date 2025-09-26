@@ -33,7 +33,7 @@ def test_chamar_procedure(mock_conn_cursor):
     ) as mock_delete, patch("app.service.encerra_conexao"):
         service.chamar_procedure("usuarios")
 
-    mock_cursor.execute.assert_called_once_with("CALL SP_AtualizaUsuarios();")
+    mock_cursor.execute.assert_called_once_with("CALL prc_atualiza_usuarios();")
     mock_conn.commit.assert_called_once()
     mock_delete.assert_called_once_with("usuarios")
 
