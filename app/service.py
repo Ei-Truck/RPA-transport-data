@@ -77,7 +77,9 @@ def pegar_colunas(tabela):
             and coluna[0] != "is_inactive"
         ]
     except Exception as e:
-        raise RuntimeError(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
+        raise RuntimeError(
+            f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}"
+        )
     finally:
         encerra_conexao(conn)
 
@@ -99,7 +101,9 @@ def pegar_colunas_tipo(tabela):
             and coluna[0] != "isdeleted"
         ]
     except Exception as e:
-        raise RuntimeError(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
+        raise RuntimeError(
+            f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}"
+        )
     finally:
         encerra_conexao(conn)
 

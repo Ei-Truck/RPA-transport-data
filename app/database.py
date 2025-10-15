@@ -16,7 +16,9 @@ def conecta_primeiro():
         )
         return conn
     except Exception as e:
-        raise ConnectionError(f"Ocorreu um erro ao tentar conectar ao banco de dados do primeiro: {e}")
+        raise ConnectionError(
+            f"Ocorreu um erro ao tentar conectar ao banco de dados do primeiro: {e}"
+        )
 
 
 def conecta_segundo():
@@ -30,7 +32,10 @@ def conecta_segundo():
         )
         return conn
     except Exception as e:
-        raise ConnectionError(f"Ocorreu um erro ao tentar conectar ao banco de dados do segundo: {e}")
+        raise ConnectionError(
+            f"Ocorreu um erro ao tentar conectar ao banco de dados do segundo: {e}"
+        )
+
 
 def encerra_conexao(conn):
     if conn:
