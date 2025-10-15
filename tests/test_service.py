@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import MagicMock, patch
 import app.service as service
 
+
 @pytest.fixture
 def mock_conn_cursor():
     mock_conn = MagicMock()
@@ -111,7 +112,10 @@ def test_delete_tabela_temp_exception(mock_conn_cursor):
 def test_pegar_colunas(mock_conn_cursor):
     mock_conn, mock_cursor = mock_conn_cursor
     mock_cursor.fetchall.return_value = [
-        ("id",), ("nome",), ("transaction_made",), ("idade",)
+        ("id",),
+        ("nome",),
+        ("transaction_made",),
+        ("idade",),
     ]
 
     with patch("app.service.conecta_primeiro", return_value=mock_conn), patch(
@@ -136,7 +140,10 @@ def test_pegar_colunas_exception(mock_conn_cursor):
 def test_pegar_colunas_tipo(mock_conn_cursor):
     mock_conn, mock_cursor = mock_conn_cursor
     mock_cursor.fetchall.return_value = [
-        ("id", "serial"), ("nome", "varchar"), ("transaction_made", "timestamp"), ("idade", "int")
+        ("id", "serial"),
+        ("nome", "varchar"),
+        ("transaction_made", "timestamp"),
+        ("idade", "int"),
     ]
 
     with patch("app.service.conecta_primeiro", return_value=mock_conn), patch(

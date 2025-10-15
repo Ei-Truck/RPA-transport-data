@@ -14,8 +14,9 @@ def test_conecta_primeiro_exception():
     with patch("psycopg2.connect", side_effect=Exception("Erro na conexão")):
         with pytest.raises(ConnectionError) as exc:
             database.conecta_primeiro()
-        assert "Ocorreu um erro ao tentar conectar ao banco de dados do primeiro" in str(
-            exc.value
+        assert (
+            "Ocorreu um erro ao tentar conectar ao banco de dados do primeiro"
+            in str(exc.value)
         )
 
 
