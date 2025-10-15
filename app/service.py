@@ -11,8 +11,7 @@ def pegar_dados(tabela, colunas):
         dados = cursor.fetchall()
         return [dado[0] for dado in dados]
     except Exception as e:
-        print(f"Erro ao pegar os dados para transferir da tabela {tabela}: {e}")
-        return None
+        raise RuntimeError(f"Erro ao pegar os dados da tabela {tabela}: {e}")
     finally:
         encerra_conexao(conn)
 
@@ -27,7 +26,7 @@ def chamar_procedure(tabela):
         conn.commit()
         delete_tabela_temp(tabela)
     except Exception as e:
-        print(f"Erro ao chamar {procedure}(): {e}")
+        raise RuntimeError(f"Erro ao chamar a procedure {procedure}(): {e}")
     finally:
         encerra_conexao(conn)
 
@@ -44,7 +43,7 @@ def criar_tabela_temp(tabela, colunas_tipo):
         cursor.execute(comando)
         conn.commit()
     except Exception as e:
-        print(f"Erro ao criar {tabela}_temp: {e}")
+        raise RuntimeError(f"Erro ao criar tabela temporária {tabela}_temp: {e}")
     finally:
         encerra_conexao(conn)
 
@@ -57,7 +56,7 @@ def delete_tabela_temp(tabela):
         cursor.execute(comando)
         conn.commit()
     except Exception as e:
-        print(f"Erro ao deletar a tabela temporária {tabela}_temp: {e}")
+        raise RuntimeError(f"Erro ao deletar a tabela temporária {tabela}_temp: {e}")
     finally:
         encerra_conexao(conn)
 
@@ -78,8 +77,7 @@ def pegar_colunas(tabela):
             and coluna[0] != "is_inactive"
         ]
     except Exception as e:
-        print(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
-        return None
+        raise RuntimeError(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
     finally:
         encerra_conexao(conn)
 
@@ -101,8 +99,7 @@ def pegar_colunas_tipo(tabela):
             and coluna[0] != "isdeleted"
         ]
     except Exception as e:
-        print(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
-        return None
+        raise RuntimeError(f"Erro ao pegar os nomes das colunas da tabela {tabela}: {e}")
     finally:
         encerra_conexao(conn)
 
@@ -116,8 +113,7 @@ def pegar_tabelas(schema):
         tabelas = cursor.fetchall()
         return [tabela[0] for tabela in tabelas]
     except Exception as e:
-        print(f"Erro ao pegar tabelas do shema {schema}: {e}")
-        return None
+        raise RuntimeError(f"Erro ao pegar tabelas do shema {schema}: {e}")
     finally:
         encerra_conexao(conn)
 
@@ -134,6 +130,6 @@ def inserir_dados(dados, tabela, colunas):
         cursor.execute(comando, dados)
         conn.commit()
     except Exception as e:
-        print(f"Erro ao inserir dados: {e}")
+        raise RuntimeError(f"Erro ao inserir dados: {e}")
     finally:
         encerra_conexao(conn)
