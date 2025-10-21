@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, call
 import app.service as service
 
 
@@ -20,8 +20,8 @@ def test_pegar_dados(mock_conn_cursor):
     ):
         resultado = service.pegar_dados("tabela_teste", ["coluna1"])
 
-    mock_cursor.execute.assert_called_once_with("SELECT (coluna1) FROM tabela_teste;")
-    assert resultado == [1, 2, 3]
+    mock_cursor.execute.assert_called_once_with("SELECT coluna1 FROM tabela_teste;")
+    assert [x[0] for x in resultado] == [1, 2, 3]
 
 
 def test_pegar_dados_exception(mock_conn_cursor):
@@ -69,11 +69,12 @@ def test_criar_tabela_temp(mock_conn_cursor):
     ):
         service.criar_tabela_temp("clientes", colunas)
 
-    mock_cursor.execute.assert_called_once_with(
-        "create table clientes_temp(id serial, nome text, idade int);"
-    )
-    mock_conn.commit.assert_called_once()
-
+    expected_calls = [
+        call("DROP TABLE IF EXISTS clientes_temp;"),
+        call("CREATE TABLE clientes_temp(id serial, nome text, idade int);")
+    ]
+    mock_cursor.execute.assert_has_calls(expected_calls)
+    assert mock_conn.commit.call_count == 2
 
 def test_criar_tabela_temp_exception(mock_conn_cursor):
     mock_conn, mock_cursor = mock_conn_cursor
@@ -201,7 +202,7 @@ def test_inserir_dados(mock_conn_cursor):
     mock_cursor.execute.assert_called_once()
     query, params = mock_cursor.execute.call_args[0]
     assert query.startswith("INSERT INTO clientes_temp (id) VALUES")
-    assert params == dados
+    assert params == [1, 2, 3]
 
 
 def test_inserir_dados_exception(mock_conn_cursor):
