@@ -1,15 +1,15 @@
-from app.database import conecta_primeiro, conecta_segundo, encerra_conexao
+from database import conecta_primeiro, conecta_segundo, encerra_conexao
 
 
 def pegar_dados(tabela, colunas):
     try:
         conn = conecta_primeiro()
         cursor = conn.cursor()
-        nomes_colunas = f"({', '.join(colunas)})"
+        nomes_colunas = ", ".join(colunas)
         comando = f"SELECT {nomes_colunas} FROM {tabela};"
         cursor.execute(comando)
         dados = cursor.fetchall()
-        return [dado[0] for dado in dados]
+        return dados
     except Exception as e:
         raise RuntimeError(f"Erro ao pegar os dados da tabela {tabela}: {e}")
     finally:
@@ -35,11 +35,12 @@ def criar_tabela_temp(tabela, colunas_tipo):
     try:
         conn = conecta_segundo()
         cursor = conn.cursor()
-        for i in colunas_tipo:
-            if i[1] == "character varying":
-                colunas_tipo[colunas_tipo.index(i)] = (i[0], "text")
-        campos = f"{', '.join(f'{c} {t}' for c, t in colunas_tipo)}"
-        comando = f"create table {tabela}_temp(id serial, {campos});"
+        delete_tabela_temp(tabela)
+        colunas_tipo_ajustadas = [
+            (c, "text" if t == "character varying" else t) for c, t in colunas_tipo
+        ]
+        campos = ", ".join(f"{c} {t}" for c, t in colunas_tipo_ajustadas)
+        comando = f"CREATE TABLE {tabela}_temp(id serial, {campos});"
         cursor.execute(comando)
         conn.commit()
     except Exception as e:
@@ -71,10 +72,7 @@ def pegar_colunas(tabela):
         return [
             coluna[0]
             for coluna in colunas
-            if coluna[0] != "id"
-            and coluna[0] != "transaction_made"
-            and coluna[0] != "updated_at"
-            and coluna[0] != "is_inactive"
+            if coluna[0] not in ["id", "transaction_made", "updated_at", "is_inactive"]
         ]
     except Exception as e:
         raise RuntimeError(
@@ -94,11 +92,8 @@ def pegar_colunas_tipo(tabela):
         return [
             coluna
             for coluna in colunas
-            if coluna[0] != "id"
-            and coluna[0] != "transaction_made"
-            and coluna[0] != "isupdated"
-            and coluna[0] != "isinactive"
-            and coluna[0] != "isdeleted"
+            if coluna[0]
+            not in ["id", "transaction_made", "isupdated", "isinactive", "isdeleted"]
         ]
     except Exception as e:
         raise RuntimeError(
@@ -112,12 +107,12 @@ def pegar_tabelas(schema):
     try:
         conn = conecta_primeiro()
         cursor = conn.cursor()
-        comando = f"select table_name from information_schema.tables where table_schema = '{schema}';"
+        comando = f"SELECT table_name FROM information_schema.tables WHERE table_schema = '{schema}';"
         cursor.execute(comando)
         tabelas = cursor.fetchall()
         return [tabela[0] for tabela in tabelas]
     except Exception as e:
-        raise RuntimeError(f"Erro ao pegar tabelas do shema {schema}: {e}")
+        raise RuntimeError(f"Erro ao pegar tabelas do schema {schema}: {e}")
     finally:
         encerra_conexao(conn)
 
@@ -126,12 +121,15 @@ def inserir_dados(dados, tabela, colunas):
     try:
         conn = conecta_segundo()
         cursor = conn.cursor()
-        quantidade_parametros = f"{', '.join(['(%s)'] * len(dados))}"
+        quantidade_parametros = ", ".join(
+            ["(" + ", ".join(["%s"] * len(colunas)) + ")" for _ in dados]
+        )
         nomes_colunas = f"({', '.join(colunas)})"
         comando = (
             f"INSERT INTO {tabela}_temp {nomes_colunas} VALUES {quantidade_parametros};"
         )
-        cursor.execute(comando, dados)
+        valores = [item for tupla in dados for item in tupla]
+        cursor.execute(comando, valores)
         conn.commit()
     except Exception as e:
         raise RuntimeError(f"Erro ao inserir dados: {e}")
