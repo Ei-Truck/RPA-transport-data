@@ -71,10 +71,11 @@ def test_criar_tabela_temp(mock_conn_cursor):
 
     expected_calls = [
         call("DROP TABLE IF EXISTS clientes_temp;"),
-        call("CREATE TABLE clientes_temp(id serial, nome text, idade int);")
+        call("CREATE TABLE clientes_temp(id serial, nome text, idade int);"),
     ]
     mock_cursor.execute.assert_has_calls(expected_calls)
     assert mock_conn.commit.call_count == 2
+
 
 def test_criar_tabela_temp_exception(mock_conn_cursor):
     mock_conn, mock_cursor = mock_conn_cursor
