@@ -2,8 +2,11 @@ import psycopg2
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(".env")
 
+print(os.getenv("connstring_segundo"))
+print()
+print(os.getenv("connstring_primeiro"))
 
 def conecta_primeiro():
     try:

@@ -1,4 +1,4 @@
-from app.database import conecta_primeiro, conecta_segundo, encerra_conexao
+from database import conecta_primeiro, conecta_segundo, encerra_conexao
 
 
 def pegar_dados(tabela, colunas):
