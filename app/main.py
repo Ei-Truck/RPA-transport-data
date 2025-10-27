@@ -1,6 +1,5 @@
 from service import (
     pegar_dados,
-    pegar_tabelas,
     pegar_colunas,
     criar_tabela_temp,
     inserir_dados,
@@ -10,7 +9,14 @@ from service import (
 
 
 def atualizar_banco():
-    lista_tabelas = pegar_tabelas("public")
+    lista_tabelas = [
+        "segmento",
+        "endereco",
+        "unidade",
+        "tipo_ocorrencia",
+        "analista",
+        "administrador",
+    ]
     string_tabelas = ", ".join(lista_tabelas)
     print(f"Começando o procedimento nas tabelas: {string_tabelas}")
     for tabela in lista_tabelas:

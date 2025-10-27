@@ -1,3 +1,4 @@
+import pytest
 from unittest.mock import patch, MagicMock
 from app import database
 
@@ -11,9 +12,12 @@ def test_conecta_primeiro_sucesso():
 
 def test_conecta_primeiro_exception():
     with patch("psycopg2.connect", side_effect=Exception("Erro na conexão")):
-        conn = database.conecta_primeiro()
-    # Se der erro, retorna None
-    assert conn is None
+        with pytest.raises(ConnectionError) as exc:
+            database.conecta_primeiro()
+        assert (
+            "Ocorreu um erro ao tentar conectar ao banco de dados do primeiro"
+            in str(exc.value)
+        )
 
 
 def test_conecta_segundo_sucesso():
@@ -25,8 +29,11 @@ def test_conecta_segundo_sucesso():
 
 def test_conecta_segundo_exception():
     with patch("psycopg2.connect", side_effect=Exception("Erro na conexão")):
-        conn = database.conecta_segundo()
-    assert conn is None
+        with pytest.raises(ConnectionError) as exc:
+            database.conecta_segundo()
+        assert "Ocorreu um erro ao tentar conectar ao banco de dados do segundo" in str(
+            exc.value
+        )
 
 
 def test_encerra_conexao_fecha():
