@@ -68,7 +68,7 @@ database_segundo=nome_banco_destino
 
 ## 🧪 Testes
 
-- **Para executar os testes automatizados:** `pytest`
+- **Para executar os testes automatizados:** `python -m pytest`
 
 ## 📝 Observações
 
