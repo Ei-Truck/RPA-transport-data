@@ -1,4 +1,4 @@
-from service import (
+from app.service import (
     pegar_dados,
     pegar_colunas,
     criar_tabela_temp,

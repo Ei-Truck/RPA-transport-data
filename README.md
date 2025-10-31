@@ -66,6 +66,14 @@ port_segundo=5432
 database_segundo=nome_banco_destino
 ```
 
+## 🏃 Como Executar o Projeto
+
+### 1️⃣ Na raiz do projeto, execute o comando:
+
+```bash
+python -m app.main
+````
+
 ## 🧪 Testes
 
 - **Para executar os testes automatizados:** `python -m pytest`
