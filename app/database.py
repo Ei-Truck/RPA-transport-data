@@ -8,6 +8,7 @@ print(os.getenv("connstring_segundo"))
 print()
 print(os.getenv("connstring_primeiro"))
 
+
 def conecta_primeiro():
     try:
         conn = psycopg2.connect(
