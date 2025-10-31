@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch, call
-import app.service as service
+from app import service
 
 
 @pytest.fixture
